@@ -1,10 +1,10 @@
-﻿using AtlusScriptLibrary.Common.IO;
-using AtlusScriptLibrary.MessageScriptLanguage.BinaryModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using AtlusScriptLibrary.Common.IO;
+using AtlusScriptLibrary.MessageScriptLanguage.BinaryModel;
 
 namespace AtlusScriptLibrary.MessageScriptLanguage;
 
@@ -246,7 +246,8 @@ public class MessageScript
 
     private static FunctionToken ParseFunctionToken(byte b, IReadOnlyList<byte> buffer, ref int bufferIndex, FormatVersion version)
     {
-        int functionId = (b << 8) | buffer[bufferIndex++];
+        int first = (version == FormatVersion.Version1Reload) ? buffer[bufferIndex++] : b;
+        int functionId = (first << 8) | buffer[bufferIndex++];
         int functionTableIndex = (functionId & 0xE0) >> 5;
         int functionIndex = (functionId & 0x1F);
 
@@ -279,7 +280,6 @@ public class MessageScript
 
             functionArguments[i] = (ushort)((firstByte & ~0xFF00) | ((secondByte << 8) & 0xFF00));
         }
-
         var bAddIdentifierType = (version == FormatVersion.Version1Reload) ? true : false;
         return new FunctionToken(functionTableIndex, functionIndex, bAddIdentifierType, functionArguments);
     }
