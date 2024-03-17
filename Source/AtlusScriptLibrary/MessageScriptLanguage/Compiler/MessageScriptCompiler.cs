@@ -400,7 +400,7 @@ public class MessageScriptCompiler
                     {
                         case "f":
                             {
-                                if (!TryCompileFunctionToken(tagContext, out var functionToken))
+                                if (!TryCompileFunctionToken(tagContext, out var functionToken, false))
                                 {
                                     mLogger.Error("Failed to compile function token");
                                     return false;
@@ -409,7 +409,17 @@ public class MessageScriptCompiler
                                 lineToken = functionToken;
                             }
                             break;
+                        case "uf": // UTF-8 msg function (P3RE)
+                            {
+                                if (!TryCompileFunctionToken(tagContext, out var functionToken, true))
+                                {
+                                    mLogger.Error("Failed to compile function token");
+                                    return false;
+                                }
 
+                                lineToken = functionToken;
+                            }
+                            break;
                         case "n":
                             lineToken = new NewLineToken();
                             break;
@@ -525,7 +535,7 @@ public class MessageScriptCompiler
                 arguments.Add(argument);
             }
 
-            functionToken = new FunctionToken(library.Index, function.Index, arguments);
+            functionToken = new FunctionToken(library.Index, function.Index, arguments, functionToken.UseIdentifierByte);
             functionWasFound = true;
             break;
         }
@@ -533,7 +543,7 @@ public class MessageScriptCompiler
         return functionWasFound;
     }
 
-    private bool TryCompileFunctionToken(MessageScriptParser.TokenContext context, out FunctionToken functionToken)
+    private bool TryCompileFunctionToken(MessageScriptParser.TokenContext context, out FunctionToken functionToken, bool useIdentifierByte)
     {
         LogContextInfo(context);
 
@@ -559,11 +569,11 @@ public class MessageScriptCompiler
                 arguments.Add(argument);
             }
 
-            functionToken = new FunctionToken(functionTableIndex, functionIndex, arguments);
+            functionToken = new FunctionToken(functionTableIndex, functionIndex, arguments, useIdentifierByte);
         }
         else
         {
-            functionToken = new FunctionToken(functionTableIndex, functionIndex);
+            functionToken = new FunctionToken(functionTableIndex, functionIndex, useIdentifierByte);
         }
 
         return true;

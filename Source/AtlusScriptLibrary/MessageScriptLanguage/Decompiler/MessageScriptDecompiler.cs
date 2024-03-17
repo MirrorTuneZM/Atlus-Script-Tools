@@ -195,14 +195,14 @@ public sealed class MessageScriptDecompiler : IDisposable
                 }
             }
         }
-
+        var tagHeader = token.UseIdentifierByte ? "uf" : "f";
         if (token.Arguments.Count == 0)
         {
-            WriteTag("f", token.FunctionTableIndex.ToString(), token.FunctionIndex.ToString());
+            WriteTag(tagHeader, token.FunctionTableIndex.ToString(), token.FunctionIndex.ToString());
         }
         else
         {
-            WriteOpenTag("f");
+            WriteOpenTag(tagHeader);
             WriteTagArgument(token.FunctionTableIndex.ToString());
             WriteTagArgument(token.FunctionIndex.ToString());
 
