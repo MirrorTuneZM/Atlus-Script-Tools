@@ -30,7 +30,7 @@ public sealed class FlowScriptBinary
     {
         using (var reader = new FlowScriptBinaryReader(stream, version, leaveOpen))
         {
-            return reader.ReadBinary();
+            return reader.ReadBinary(version);
         }
     }
 

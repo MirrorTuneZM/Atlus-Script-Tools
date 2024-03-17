@@ -82,6 +82,7 @@ public sealed class FlowScriptBinaryWriter : IDisposable
             int labelLength = (mVersion.HasFlag(BinaryFormatVersion.Version1) ? BinaryLabel.SIZE_V1 :
                                 mVersion.HasFlag(BinaryFormatVersion.Version2) ? BinaryLabel.SIZE_V2 :
                                 mVersion.HasFlag(BinaryFormatVersion.Version3) ? BinaryLabel.SIZE_V3 :
+                                mVersion.HasFlag(BinaryFormatVersion.Version4) ? BinaryLabel.SIZE_V4 :
                                 throw new Exception("Invalid format version")) - (sizeof(int) * 2);
 
             mWriter.Write(label.Name.Substring(0, Math.Min(label.Name.Length, labelLength)),

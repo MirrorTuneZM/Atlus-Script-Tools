@@ -195,6 +195,9 @@ public class Instruction : IEquatable<Instruction>
             case Opcode.POPLFX:
                 return POPLFX(binary.OperandShort);
 
+            case Opcode.POPREG:
+                throw new Exception("Pop Register Opcode WIP");
+
             default:
                 throw new Exception("Opcode not supported");
         }
@@ -547,6 +550,10 @@ public class Instruction : IEquatable<Instruction>
     public static Instruction PUSHSTR(string value)
     {
         return new Instruction(Opcode.PUSHSTR, value);
+    }
+    public static Instruction POPREG()
+    {
+        return new Instruction(Opcode.POPREG);
     }
 
     public override string ToString()
